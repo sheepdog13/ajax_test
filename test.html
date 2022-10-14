@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .list {
+            border: solid 1px gray;
+            border-radius: 20px;
+            overflow: hidden;
+            clear: both;
+        }
+        .list img {
+            width: 200px;
+            height: 200px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>메뉴 리스트 입니다</h1>
+    <h2>식당이름</h2>
+    <p>메뉴 카테고리대분류명 - 메뉴이름</p>
+    <button id="add">추가</button>
+    <script>
+        async function doFetch() {
+            const response = await fetch('./공공데이터.json');
+            
+            const data = await response.json()
+
+            function menuTag(reName, menuType, menuName){
+                // DOM 요소 만들어서 추가하기.
+                const reNameTag = document.createElement("h3")
+                reNameTag.innerHTML = reName;
+                const menuTypeTag = document.createElement("p")
+                menuTypeTag.innerHTML = `${menuType} - ${menuName}` 
+                
+
+                const menuBox = document.createElement("div");
+                menuBox.append(reNameTag);
+                menuBox.append(menuTypeTag);
+                menuBox.classList.add("list");
+
+                document.querySelector("body").append(menuBox)
+            }
+            
+            for(let i = count; i < count+5; i++) {
+                menuTag(data.body[i].RSTR_NM,
+                        data.body[i].MENU_CTGRY_LCLAS_NM,
+                        data.body[i].MENU_NM);
+            }
+        }
+        doFetch()
+
+        let count = 0;
+        const button = document.querySelector("#add")
+        button.addEventListener("click", ()=> {
+            count += 5;
+            doFetch(count)
+        })
+    </script>
+</body>
+</html>
